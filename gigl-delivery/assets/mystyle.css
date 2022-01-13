@@ -1,0 +1,29 @@
+.gigl-admin-dash{
+	background: url('media/gig-logistics-delivery-services-gigl.jpeg');
+	height: 400px;
+	width: 98%;
+	background-position: center center;
+	background-size: cover;
+	background-repeat: no-repeat;
+
+}
+.flex-box-display{
+display: flex;
+width: 98%;
+}
+.box-div{
+    width: 24%;
+    flex: 1 1 auto;
+    background: #ffffff;
+    border: 1px solid #c5c4c4;
+}
+.box-divs{
+    padding: 45px 15px;
+}
+.gigl-admin-dash-service{
+    width: 100%;
+}
+#woocommerce_gigl_delivery_login_status{
+	background: none;
+    border: none;
+}

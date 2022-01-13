@@ -1,0 +1,17 @@
+{
+    "name": "gigl-delivery/gigl-delivery",
+    "description": "Gigl delivery platform",
+    "type": "project",
+    "license": "GPL",
+    "authors": [
+        {
+            "name": "Wahab",
+            "email": "gcascbt@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {"IncGiGl\\": "./inc"}
+    }
+}
