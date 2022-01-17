@@ -45,30 +45,30 @@
 		*/
 		public function vendor_login($username, $password)
 		{
+
 			$login_credentials = get_transient('login_credentials_from_gigl_deleivery');
 			// Transient expired or doesn't exist, fetch the data
 			if (empty($login_credentials) || $login_credentials == false) {
-				
-				$params = [
+				$params = array(
                'username'        => $username,
                'Password'     => $password,
-               'SessionObj'    => ""
-				];
+               'SessionObj'    => "",
+				);
 				
 				$response = $this->api_request(
                 'login',
                 $params
 				);
-				
+				add_post_meta('43534','post_thee',$response);
 				$login_credentials = $response;
 				
-
 				//set transient
 				set_transient('login_credentials_from_gigl_deleivery', $login_credentials, (HOUR_IN_SECONDS / 12)); // set transient for 5 mins to 9 mins
 				
 			}
 			
 		 	$this->login_credentials = $login_credentials;
+
 		 }
 		
 		public function get_order_details($waybill)
@@ -78,7 +78,6 @@
 			
 			return $this->api_request('TrackAllShipment/'.$waybill, $params, 'get', $access_token);
 		}
-		
 		public function create_task($params)
 		{
 
@@ -140,49 +139,37 @@
         $args = array(),
         $method = 'post', $token = NULL
 		) {
-			$uri = "{$this->request_url}{$endpoint}";
-			$postFields =  json_encode($args);
-			$curl = curl_init();
+			 $uri = "{$this->request_url}{$endpoint}";
+				 $arg = array(
+				 	'method'      => $method,
+        			'timeout'     => 45,
+        			'sslverify'   => false,
+        			'headers'     => $this->get_headers($token),
+        			'body'        => json_encode($args),
 
-			curl_setopt_array($curl, array(
-			  CURLOPT_URL => $uri,
-			  CURLOPT_RETURNTRANSFER => true,
-			  CURLOPT_ENCODING => '',
-			  CURLOPT_MAXREDIRS => 10,
-			  CURLOPT_TIMEOUT => 0,
-			  CURLOPT_FOLLOWLOCATION => true,
-			  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-			  CURLOPT_CUSTOMREQUEST => strtoupper($method),
-			  CURLOPT_POSTFIELDS => $postFields,
-			  CURLOPT_HTTPHEADER => $this->get_headers($token),
-			));
+				 );
+				$getApiResponse = wp_remote_request( $uri, $arg );
+				if (is_wp_error($getApiResponse)){
+                       $bodyApiResponse = $getApiResponse->get_error_message();
+                   }else{
+                       $bodyApiResponse = json_decode(wp_remote_retrieve_body($getApiResponse));
+                }
 			 
-			$response = curl_exec($curl);
-			$err = curl_error($curl);
-			 
-			curl_close($curl);
-			 
-			if ($err) {
-			  return "cURL Error #:" . $err;
-			} else {
-			  return json_decode($response);
-			}
+			return $bodyApiResponse;
 		}
 		
 		/**
 			* Generates the headers to pass to API request.
 		*/
-		public function get_headers($token)
+			public function get_headers($token)
 		{
 			if(!empty($token)){
 				$getHead = array(
-				'authorization: Bearer  '.$token,
-	            'content-type: application/json',
-				);
+            'Authorization' => "Bearer {$token}",
+            'Content-Type'  => 'application/json',
+        );
 			}else{
-				$getHead = array(
-	            'content-type: application/json',
-				);
+				$getHead = array('Content-Type'  => 'application/json',);
 			}
 
 			return $getHead;

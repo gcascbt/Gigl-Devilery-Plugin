@@ -183,14 +183,14 @@
             <tr>
                 <th><strong><?php esc_html_e('Shipping Status') ?> : </strong></th>
                 <td>
-                    <?php echo sanitize_text_field($order->get_meta('gigl_delivery_status_res')); ?>
+                    <?php echo wp_kses($order->get_meta('gigl_delivery_status_res')); ?>
 				</td>
 			</tr>
 			
             <tr>
                 <th><strong><?php esc_html_e('Tracking ID') ?> : </strong></th>
                 <td>
-                    <?php echo sanitize_text_field($order->get_meta('gigl_delivery_tracking_id')); ?>
+                    <?php echo wp_kses($order->get_meta('gigl_delivery_tracking_id')); ?>
 				</td>
 			</tr>
 		</table>
